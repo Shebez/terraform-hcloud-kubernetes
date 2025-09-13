@@ -53,8 +53,7 @@ resource "terraform_data" "create_talosconfig" {
     when    = create
     quiet   = true
     command = <<-EOT
-      set -eu
-
+      mkdir -p "$(dirname "$CLUSTER_TALOSCONFIG_PATH")" 2>/dev/null || true
       printf '%s' "$TALOSCONFIG_CONTENT" > "$CLUSTER_TALOSCONFIG_PATH"
     EOT
     environment = {
@@ -68,8 +67,6 @@ resource "terraform_data" "create_talosconfig" {
     quiet      = true
     on_failure = continue
     command    = <<-EOT
-      set -eu
-
       if [ -f "$CLUSTER_TALOSCONFIG_PATH" ]; then
         cp -f "$CLUSTER_TALOSCONFIG_PATH" "$CLUSTER_TALOSCONFIG_PATH.bak"
       fi
@@ -98,8 +95,7 @@ resource "terraform_data" "create_kubeconfig" {
     when    = create
     quiet   = true
     command = <<-EOT
-      set -eu
-
+      mkdir -p "$(dirname "$CLUSTER_KUBECONFIG_PATH")" 2>/dev/null || true
       printf '%s' "$KUBECONFIG_CONTENT" > "$CLUSTER_KUBECONFIG_PATH"
     EOT
     environment = {
@@ -113,8 +109,6 @@ resource "terraform_data" "create_kubeconfig" {
     quiet      = true
     on_failure = continue
     command    = <<-EOT
-      set -eu
-
       if [ -f "$CLUSTER_KUBECONFIG_PATH" ]; then
         cp -f "$CLUSTER_KUBECONFIG_PATH" "$CLUSTER_KUBECONFIG_PATH.bak"
       fi
